@@ -202,13 +202,15 @@ def connect_nodes():
 # replacing the chain by the longest chain if needed
 @app.route('/replace_chain', methods=['GET'])
 def replace_chain():
-    longest_chain = blockchain.chain
-    for chain in blockchain:
-        if chain != longest_chain:
-            return blockchain.replace_chain()
-    response = {
-        'message': 'this is the longest chain in the nethereum blockchain'}
-    return jsonify(response), 200
+    # This returns a boolean (yes/no) and lets us know if our blockchain is replaced or not
+    is_chain_replaced = blockchain.replace_chain
+    if is_chain_replaced == True:
+        response = {'message': 'nodes in the netheruem blockchain have differents chains, hence chain is replaced by the longest chain',
+                    'new_chain': blockchain.chain}
+    else:
+        response = {'message': 'this is the longest chain',
+                    'actual_chain': blockchain.chain}
+        return jsonify(response), 200
 
 
 # Running the App
